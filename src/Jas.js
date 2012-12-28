@@ -1,7 +1,5 @@
-/*%include_once file="channel.core.js"%*/
-
 ;define(function(require){
-    var core     = require('core');
+    var core = require('core');
     
     var uid = 1;
     var Jas = function(){

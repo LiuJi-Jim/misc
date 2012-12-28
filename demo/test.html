@@ -1,7 +1,53 @@
-<script src="../libs/sea.js"></script>
+<style>
+strong {
+    color:#f00;
+}
+</style>
+<p id="rot">鑫森淼焱垚品晶芔众</p>
+<script src="../libs/sea.js" id="seajsnode"></script>
 <script>
 seajs.config({
     base: '../src/'
 })
-seajs.use('./test');
+define('main', function(require){
+    var Jas = require('jas');
+    var flow = new Jas();
+    function write(str){
+        var p = document.createElement('p');
+        p.innerHTML = str;
+        document.body.appendChild(p);
+    }
+    flow.when(['a', 'b'], function(){
+        write(3);
+    });
+    flow.when('#', function(){
+        setTimeout(function(){
+            write(1);
+            flow.now('a');
+        }, 1000);
+    });
+    flow.when('#', function(){
+        setTimeout(function(){
+            write(2);
+            flow.now('b');
+        }, 2000);
+    });
+    flow.now('#');
+
+    var Deferred = require('deferred');
+    var p = document.getElementById('rot'),
+        txt = p.innerHTML,
+        dfd = new Deferred,
+        cur = 0;
+
+    var queue = dfd;
+    var iter = function(){
+        p.innerHTML = txt.substr(0, cur) + '<strong>'+txt.charAt(cur)+'</strong>' + txt.substr(cur+1);
+        cur = (cur + 1) % txt.length;
+        queue = queue.delay(100).then(iter);
+    };
+    dfd.then(iter);
+    dfd.resolve();
+});
+seajs.use('main');
 </script>

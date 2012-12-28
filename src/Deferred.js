@@ -11,7 +11,7 @@
         否则second将会立即resolve/reject
 */
 ;define(function(require){
-    var core     = require('core');
+    var core = require('core');
     
     var state_unresolved = 0,
         state_resolved = 1,

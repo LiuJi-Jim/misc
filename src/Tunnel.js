@@ -1,9 +1,9 @@
 ;define(function(require){
     var core     = require('core'),
-        Events   = require('Events'),
-        Deferred = require('Deferred'),
+        Events   = require('events'),
+        Deferred = require('deferred'),
         browser  = require('browser'),
-        JSON     = require('JSON');
+        JSON     = require('json');
 
     /*
         Whisper
@@ -156,7 +156,7 @@
     }else{
         /*
             不支持postMessage的时候，用window.name做跳板
-            Tunnel.name可以读也可以写，用来被other写，然后自己读，收消息
+            self.name可以读也可以写，用来被other写，然后自己读，收消息
             other.name能写不能读，用来自己写，等other读，发消息
         */
         var message_queue = Deferred.now, delay = 25;

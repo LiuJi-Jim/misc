@@ -67,6 +67,9 @@
             String(obj) :
             class2type[toS.call(obj)] || "object";
     },
+    isS = exports.isS = function(obj){
+        return type(obj) === 'string';
+    },
     isA = exports.isA = function(obj){
         // from jQuery
         return type(obj) === "array";
