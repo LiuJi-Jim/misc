@@ -1,0 +1,76 @@
+<script src="../src/Polygon.js"></script>
+
+
+<canvas id="cvs" width="1200" height="800" style="border:0px solid #000;"></canvas>
+<script>
+var cvs = document.getElementById('cvs'),
+    ctx = cvs.getContext('2d');
+    
+var rand = function(a, b){
+    if (typeof a !== 'undefined'){
+        if (typeof b !== 'undefined'){
+            return parseInt(Math.random() * (b - a)) + a;
+        }
+        return parseInt(Math.random() * a);
+    }
+    return parseInt(Math.random() * 1000000);
+};
+
+var polygons = [], mouseon = [];
+
+for (var n=0; n<50; ++n){
+    var points = [];
+    var cx = rand(0, 1200), cy = rand(0, 800);
+    for (var i=0; i<5; ++i){
+        var p = {
+            x: cx + rand(-100, 100),
+            y: cy + rand(-100, 100)
+        };
+        if (p.x < 0) p.x = 0;
+        if (p.x > 1200) p.x = 1200;
+        if (p.y < 0) p.y = 0;
+        if (p.y > 800) p.y = 800;
+        points.push(p);
+    }
+    var poly = new Polygon(points);
+    polygons.push(poly);
+}
+
+function fillPoly(){
+    ctx.clearRect(0, 0, cvs.width, cvs.height);
+    
+    polygons.forEach(function(poly){
+        ctx.beginPath();
+        ctx.strokeStyle = '#999';
+        ctx.strokeRect(poly.bounds.left, poly.bounds.top, poly.bounds.width, poly.bounds.height);
+        ctx.moveTo(poly.points[0].x, poly.points[0].y);
+        for (var i=1, n=poly.points.length; i<n; ++i){
+            var p = poly.points[i];
+            ctx.lineTo(p.x, p.y);
+        }
+        ctx.lineTo(poly.points[0].x, poly.points[0].y);
+        ctx.fillStyle = poly.mouseover ? '#f00' : '#0f0';
+        ctx.fill();
+        ctx.fillStyle = '#000';
+        poly.points.forEach(function(p, i){
+            //ctx.fillText(i + '('+p.x+','+p.y+')', p.x, p.y);
+            ctx.fillText(i + '('+(p.theta*180/Math.PI).toFixed(1)+')', p.x, p.y);
+            //ctx.fillText(i, p.x, p.y);
+        });
+        //ctx.fillText('('+poly.bounds.centerX+','+poly.bounds.centerY+')', poly.bounds.centerX, poly.bounds.centerY);
+        ctx.closePath();
+    });
+};
+
+var mouse = { x:0, y:0 };
+cvs.addEventListener('mousemove', function(e){
+    mouse = { x:e.offsetX, y:e.offsetY };
+},false);
+var timer = setInterval(function(){
+    polygons.forEach(function(poly, i){
+        poly.mouseover = poly.contains(mouse);
+    });
+    fillPoly();
+}, 50);
+
+</script>
