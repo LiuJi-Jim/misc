@@ -1,0 +1,41 @@
+<script src="../src/geo.js"></script>
+
+<canvas id="cvs" width="1080" height="540" style="border:1px solid #000;"></canvas>
+<script>
+var map = [
+    /*[110.339188, 18.678395],
+    [109.47521, 18.197701],
+    [108.655208, 18.507682],
+    [108.626217, 19.367888],
+    [109.119056, 19.821039],
+    [110.211599, 20.101254],
+    [110.786551, 20.077534],
+    [111.010051, 19.69593],
+    [110.570647, 19.255879],
+    [110.339188, 18.678395],*/
+    [121.43333,34.50000],
+    [117.20000,39.13333],
+    [114.10000,22.20000],
+    [113.23333,23.16667],
+    [113.51667,22.30000],
+    [114.06667,22.61667],
+    [120.20000,30.26667],
+    [106.45000, 29.56667],
+    [120.33333,36.06667],
+    [118.10000,24.46667],
+    [116.41667,39.91667]
+];
+
+var cvs = document.getElementById('cvs'),
+    ctx = cvs.getContext('2d');
+ctx.clearRect(0, 0, cvs.width, cvs.height);
+map.forEach(function(point){
+    var lng = point[0],
+        lat = point[1];
+    var pos = geo.project(geo.trans(lat), geo.trans(lng));
+    var x = pos[0], y = pos[1];
+    console.log(lat, lng, x, y);
+    ctx.fillStyle = '#0f0';
+    ctx.fillRect(x*3, y*3, 3, 3);
+});
+</script>
